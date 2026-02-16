@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fall: A Game of Endings — List Builder</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__title">
+        <h1>Fall: A Game of Endings</h1>
+        <p class="subtitle">Army List Builder (prototype)</p>
+      </div>
+      <div class="header__controls">
+        <label class="control">
+          <span>Game Size</span>
+          <select id="pointsLimit"></select>
+        </label>
+
+        <label class="control">
+          <span>Faction</span>
+          <select id="factionSelect"></select>
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel__header">
+          <h2>Units</h2>
+          <p class="muted" id="unitHelp">Select a faction to see units.</p>
+        </div>
+        <div id="unitList" class="list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header rosterHeader">
+          <div>
+            <h2>Current Roster</h2>
+            <p class="muted" id="rosterSummary">0 / 200</p>
+          </div>
+
+          <div class="rosterActions">
+            <button id="copyBtn" class="btn">Copy to clipboard</button>
+            <button id="clearBtn" class="btn btn--ghost">Clear</button>
+          </div>
+        </div>
+
+        <div id="rosterList" class="list"></div>
+
+        <div class="totalBar">
+          <div class="totalBar__left">
+            <div class="statusDot" id="statusDot" aria-hidden="true"></div>
+            <span id="statusText">Ready.</span>
+          </div>
+          <div class="totalBar__right">
+            <span class="totalLabel">Total</span>
+            <span class="totalValue" id="totalPoints">0</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="muted">Prototype: fixed unit costs, duplicates allowed.</span>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "factions": [
+    {
+      "name": "House Lionheart",
+      "units": [
+        { "name": "Guard Captain", "points": 46, "type": "Leader" },
+        { "name": "Militia Archers", "points": 72, "type": "Special" },
+        { "name": "Militia Arbaliestiers", "points": 47, "type": "Special" },
+        { "name": "Militia Footmen", "points": 57, "type": "Core" },
+        { "name": "Lionheart Foot Knights", "points": 51, "type": "Core" },
+        { "name": "Lionheart Knights", "points": 73, "type": "Special" }
+      ]
+    },
+    {
+      "name": "N’Gorroth",
+      "units": [
+        { "name": "Brine Hag", "points": 80, "type": "Leader" },
+        { "name": "Abyssal Missionary", "points": 62, "type": "Leader" },
+        { "name": "Depth Trawler", "points": 49, "type": "Special" },
+        { "name": "Fisherfolk", "points": 64, "type": "Core" },
+        { "name": "N’Gorroth Warriors", "points": 80, "type": "Core" },
+        { "name": "Shore Dredgers", "points": 42, "type": "Core" },
+        { "name": "Fish Wives", "points": 65, "type": "Special" }
+      ]
+    },
+    {
+      "name": "Seraphic Cults",
+      "units": [
+        { "name": "Oculus Consul", "points": 52, "type": "Leader" },
+        { "name": "Seraphic Cultists", "points": 60, "type": "Core" },
+        { "name": "Oculus Vigilants", "points": 51, "type": "Core" },
+        { "name": "Seraphic Guardian", "points": 51, "type": "Special" },
+        { "name": "Cherubs", "points": 77, "type": "Special" }
+      ]
+    }
+  ]
+}
