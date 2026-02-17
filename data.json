@@ -15,12 +15,12 @@
       "name": "N’Gorroth",
       "units": [
         { "name": "Brine Hag", "points": 80, "type": "Leader" },
-        { "name": "Abyssal Missionary", "points": 62, "type": "Leader" },
-        { "name": "Depth Trawler", "points": 49, "type": "Special" },
+        { "name": "Abyssal Missionary", "points": 65, "type": "Leader" },
+        { "name": "Depth Trawler", "points": 55, "type": "Special" },
         { "name": "Fisherfolk", "points": 64, "type": "Core" },
-        { "name": "N’Gorroth Warriors", "points": 80, "type": "Core" },
-        { "name": "Shore Dredgers", "points": 42, "type": "Core" },
-        { "name": "Fish Wives", "points": 65, "type": "Special" }
+        { "name": "N’Gorroth Warriors", "points": 72, "type": "Core" },
+        { "name": "Shore Dredgers", "points": 39, "type": "Core" },
+        { "name": "Fish Wives", "points": 66, "type": "Special" }
       ]
     },
     {
@@ -35,3 +35,4 @@
     }
   ]
 }
+
