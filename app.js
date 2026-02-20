@@ -211,7 +211,7 @@ function renderRoster() {
   }
   if (comp.core !== comp.requiredCore) {
     compProblems.push(
-      `Core: need ${comp.requiredCore} (you have ${comp.core}).`
+      `Core: need at least ${comp.requiredCore} (you have ${comp.core}).`
     );
   }
 
@@ -391,3 +391,4 @@ function escapeHtml(s) {
 function escapeAttr(s) {
   return escapeHtml(s);
 }
+
