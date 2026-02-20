@@ -4,7 +4,7 @@
       "name": "House Lionheart",
       "units": [
         { "name": "Guard Captain", "points": 51, "type": "Leader" },
-        { "name": "Militia Archers", "points": 72, "type": "Special" },
+        { "name": "Militia Archers", "points": 72, "type": "Core" },
         { "name": "Militia Arbaliestiers", "points": 47, "type": "Special" },
         { "name": "Militia Footmen", "points": 57, "type": "Core" },
         { "name": "Lord's Guard", "points": 64, "type": "Core" },
@@ -41,5 +41,6 @@
     }
   ]
 }
+
 
 
