@@ -209,7 +209,7 @@ function renderRoster() {
   if (comp.leaders !== 1) {
     compProblems.push(`Leaders: need exactly 1 (you have ${comp.leaders}).`);
   }
-  if (comp.core !== comp.requiredCore) {
+  if (comp.core < comp.requiredCore) {
     compProblems.push(
       `Core: need at least ${comp.requiredCore} (you have ${comp.core}).`
     );
@@ -391,4 +391,5 @@ function escapeHtml(s) {
 function escapeAttr(s) {
   return escapeHtml(s);
 }
+
 
