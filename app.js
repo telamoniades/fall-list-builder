@@ -5,16 +5,16 @@
  */
 let gameData = null;
 let selectedFactionName = "";
-let pointsLimit = 200;
+let pointsLimit = 300;
 
 // rosterEntries: [{ id, name, points, type }]
 let rosterEntries = [];
 let nextId = 1;
 
 /**
- * Type ordering
+ * Type ordering (requested)
  */
-const TYPE_ORDER = ["Leader", "Core", "Special", "Elite"];
+const TYPE_ORDER = ["Leader", "Core", "Special", "Champion"];
 const TYPE_ORDER_MAP = new Map(TYPE_ORDER.map((t, i) => [t, i]));
 
 /**
@@ -40,14 +40,14 @@ init();
 async function init() {
   populatePointsDropdown();
 
-  // Load JSON data (requires local server)
+  // Load JSON data (requires local server or GitHub Pages)
   try {
     const res = await fetch("./data.json", { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load data.json (${res.status})`);
     gameData = await res.json();
   } catch (err) {
     elUnitHelp.textContent =
-      "Could not load data.json. This version requires running a local server.";
+      "Could not load data.json. This version requires running a local server or hosting it (e.g., GitHub Pages).";
     elUnitList.innerHTML = renderError(err);
     return;
   }
@@ -71,6 +71,7 @@ function populatePointsDropdown() {
     .map((p) => `<option value="${p}">${p} points</option>`)
     .join("");
 
+  // Default to 300
   elPointsLimit.value = "300";
 }
 
@@ -88,6 +89,7 @@ function populateFactionDropdown() {
 function bindEvents() {
   elPointsLimit.addEventListener("change", () => {
     pointsLimit = Number(elPointsLimit.value);
+    renderUnits(); // champion buttons may enable/disable based on cap
     renderRoster();
   });
 
@@ -102,6 +104,7 @@ function bindEvents() {
   elClearBtn.addEventListener("click", () => {
     clearRoster();
     renderRoster();
+    renderUnits();
   });
 }
 
@@ -116,8 +119,12 @@ function renderUnits() {
     return;
   }
 
+  const comp = computeForceComp();
+  const maxChampions = getChampionCap(pointsLimit);
+  const championsAtCap = comp.champions >= maxChampions;
+
   elUnitHelp.textContent =
-    "Click Add to include units in your roster. Force rules: exactly 1 Leader; Core must cover Special (1) and Elite (2).";
+    `Rules: exactly 1 Leader · Core ≥ Special · Champions ≤ ⌊${pointsLimit}/250⌋ = ${maxChampions}.`;
 
   const units = [...(faction.units ?? [])].sort((a, b) => {
     const ta = TYPE_ORDER_MAP.get(a.type) ?? 999;
@@ -128,14 +135,26 @@ function renderUnits() {
 
   elUnitList.innerHTML = units
     .map((u) => {
+      const isChampion = u.type === "Champion";
+      const disabled = isChampion && maxChampions === 0 ? true : (isChampion && championsAtCap);
+      const disabledAttr = disabled ? "disabled" : "";
+
+      let reason = "";
+      if (disabled && isChampion) {
+        reason =
+          maxChampions === 0
+            ? ` (0 allowed at ${pointsLimit})`
+            : ` (cap ${maxChampions})`;
+      }
+
       return `
         <div class="row">
           <div class="row__left">
             <p class="row__title">${escapeHtml(u.name)}</p>
-            <div class="row__meta">${escapeHtml(u.type)} · ${u.points} pts</div>
+            <div class="row__meta">${escapeHtml(u.type)} · ${u.points} pts${escapeHtml(reason)}</div>
           </div>
           <div class="row__right">
-            <button class="btn" data-add="${escapeAttr(u.name)}">Add</button>
+            <button class="btn" data-add="${escapeAttr(u.name)}" ${disabledAttr}>Add</button>
           </div>
         </div>
       `;
@@ -145,6 +164,7 @@ function renderUnits() {
   // Wire "Add" buttons
   elUnitList.querySelectorAll("button[data-add]").forEach((btn) => {
     btn.addEventListener("click", () => {
+      if (btn.disabled) return;
       const unitName = btn.getAttribute("data-add");
       addUnit(unitName);
     });
@@ -152,7 +172,7 @@ function renderUnits() {
 }
 
 function renderRoster() {
-  // Order roster entries by type (Leader -> Core -> Special -> Elite), then by add order within type.
+  // Order roster entries by type (Leader -> Core -> Special -> Champion), then by add order within type.
   const ordered = [...rosterEntries].sort((a, b) => {
     const ta = TYPE_ORDER_MAP.get(a.type) ?? 999;
     const tb = TYPE_ORDER_MAP.get(b.type) ?? 999;
@@ -202,17 +222,25 @@ function renderRoster() {
 
   // Status indicator: points + force composition
   const comp = computeForceComp();
+  const maxChampions = getChampionCap(pointsLimit);
   const over = Math.max(0, total - pointsLimit);
   const remaining = Math.max(0, pointsLimit - total);
 
   const compProblems = [];
+
+  // Exactly one leader
   if (comp.leaders !== 1) {
     compProblems.push(`Leaders: need exactly 1 (you have ${comp.leaders}).`);
   }
+
+  // Core >= Special
   if (comp.core < comp.requiredCore) {
-    compProblems.push(
-      `Core: need at least ${comp.requiredCore} (you have ${comp.core}).`
-    );
+    compProblems.push(`Core: need at least ${comp.requiredCore} (you have ${comp.core}).`);
+  }
+
+  // Champions cap
+  if (comp.champions > maxChampions) {
+    compProblems.push(`Champions: max ${maxChampions} at ${pointsLimit} pts (you have ${comp.champions}).`);
   }
 
   const pointsOk = total <= pointsLimit;
@@ -228,12 +256,11 @@ function renderRoster() {
   } else if (!pointsOk) {
     setStatus(`Over by ${over} pts.`, "danger");
   } else if (!compOk) {
-    // Within points but force comp illegal
     setStatus(`${remaining} pts remaining. ${compProblems.join(" ")}`, "warn");
   } else if (total === pointsLimit) {
     setStatus("Legal: exact points and legal force composition.", "ok");
   } else {
-    setStatus(`${remaining} pts remaining. Force composition legal so far.`, "ok");
+    setStatus(`${remaining} pts remaining. Legal so far.`, "ok");
   }
 }
 
@@ -243,7 +270,7 @@ function renderError(err) {
       <div class="row__left">
         <p class="row__title">Data load error</p>
         <div class="row__meta">${escapeHtml(String(err.message || err))}</div>
-        <div class="row__meta">This app must be served by a local web server (not opened as a file).</div>
+        <div class="row__meta">This app must be served by a local web server or hosted (GitHub Pages works).</div>
       </div>
     </div>
   `;
@@ -256,6 +283,17 @@ function addUnit(unitName) {
   const unit = findUnitInSelectedFaction(unitName);
   if (!unit) return;
 
+  // Enforce champion cap at add-time (UX help). Status also enforces it.
+  if (unit.type === "Champion") {
+    const maxChampions = getChampionCap(pointsLimit);
+    const comp = computeForceComp();
+    if (comp.champions >= maxChampions) {
+      // no-op; renderUnits already disables the button, but this is extra safety
+      setStatus(`Champion cap reached (${maxChampions} max at ${pointsLimit} pts).`, "warn");
+      return;
+    }
+  }
+
   rosterEntries.push({
     id: nextId++,
     name: unit.name,
@@ -264,11 +302,13 @@ function addUnit(unitName) {
   });
 
   renderRoster();
+  renderUnits(); // update champion Add button disable state
 }
 
 function deleteEntry(id) {
   rosterEntries = rosterEntries.filter((e) => e.id !== id);
   renderRoster();
+  renderUnits();
 }
 
 function clearRoster() {
@@ -285,32 +325,36 @@ function getRosterTotal() {
 /**
  * Force composition
  * - Exactly 1 leader.
- * - Core must equal (Special + 2*Elite). Leaders don't count.
+ * - Core >= Special. (Champions do NOT require Core.)
+ * - Champions limited to floor(pointsLimit / 250).
  */
 function computeForceComp() {
   let leaders = 0;
   let core = 0;
   let special = 0;
-  let elite = 0;
+  let champions = 0;
 
   for (const it of rosterEntries) {
     const t = it.type;
     if (t === "Leader") leaders++;
     else if (t === "Core") core++;
     else if (t === "Special") special++;
-    else if (t === "Elite") elite++;
-    // unknown types are ignored for now
+    else if (t === "Champion") champions++;
   }
 
-  const requiredCore = special + 2 * elite;
+  const requiredCore = special; // champions do not contribute
+  return { leaders, core, special, champions, requiredCore };
+}
 
-  return { leaders, core, special, elite, requiredCore };
+function getChampionCap(limit) {
+  return Math.floor(Number(limit) / 250);
 }
 
 async function copyRosterToClipboard() {
   const faction = selectedFactionName || "Unknown faction";
   const total = getRosterTotal();
   const comp = computeForceComp();
+  const maxChampions = getChampionCap(pointsLimit);
 
   const lines = [];
   lines.push(`Fall: A Game of Endings — Roster`);
@@ -318,9 +362,9 @@ async function copyRosterToClipboard() {
   lines.push(`Limit: ${pointsLimit}`);
   lines.push(`Total: ${total}`);
   lines.push(``);
-
-  // Group header for quick legality reading
-  lines.push(`Force Comp: Leaders ${comp.leaders}/1 · Core ${comp.core}/${comp.requiredCore} (Special ${comp.special}, Elite ${comp.elite})`);
+  lines.push(
+    `Force Comp: Leaders ${comp.leaders}/1 · Core ${comp.core} (need ≥ ${comp.requiredCore}) · Special ${comp.special} · Champions ${comp.champions}/${maxChampions}`
+  );
   lines.push(``);
 
   const ordered = [...rosterEntries].sort((a, b) => {
@@ -391,5 +435,3 @@ function escapeHtml(s) {
 function escapeAttr(s) {
   return escapeHtml(s);
 }
-
-
