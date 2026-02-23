@@ -12,7 +12,7 @@
         { "name": "Lionheart Knights", "points": 74, "type": "Special" },
         { "name": "Silent Bishop", "points": 43, "type": "Special" },
         { "name": "Knight-Crusader", "points": 58, "type": "Special" },
-        { "name": "Lion Mask Knight", "points": 65, "type": "Special" }
+        { "name": "Lion Mask Knight", "points": 65, "type": "Elite" }
       ]
     },
     {
@@ -38,9 +38,31 @@
         { "name": "Cherubs", "points": 77, "type": "Special" },
         { "name": "Oculus Apostle", "points": 38, "type": "Special" }
       ]
+    },
+    {
+      "name": "Church of the Acarid",
+      "units": [
+        { "name": "Infested Cleric", "points": 80, "type": "Leader" },
+        { "name": "Infested Templar", "points": 49, "type": "Leader" },
+        { "name": "Infested Pilgrims", "points": 58, "type": "Core" },
+        { "name": "Infested Warriors", "points": 62, "type": "Core" },
+        { "name": "Stinger Pilgrims", "points": 61, "type": "Special" },
+        { "name": "Infested Questors", "points": 61, "type": "Special" },
+        { "name": "Brood Mare", "points": 43, "type": "Special" },
+        { "name": "Infested Moose", "points": 84, "type": "Champion" }
+      ]
+    },
+    {
+      "name": "Calden Keep",
+      "units": [
+        { "name": "Caldish Lord", "points": 51, "type": "Leader" },
+        { "name": "Revenant Footmen", "points": 59, "type": "Core" },
+        { "name": "Wolfsguard", "points": 62, "type": "Core" },
+        { "name": "Wolfsguard Cavalry", "points": 77, "type": "Special" },
+        { "name": "Revenant Hulks", "points": 55, "type": "Special" },
+        { "name": "Wolfsguard Piercers", "points": 50, "type": "Special" },
+        { "name": "Wolfsguard Hulk", "points": 65, "type": "Special" }
+      ]
     }
   ]
 }
-
-
-
