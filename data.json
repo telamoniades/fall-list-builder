@@ -42,7 +42,7 @@
     {
       "name": "Church of the Acarid",
       "units": [
-        { "name": "Infested Cleric", "points": 80, "type": "Leader" },
+        { "name": "Infested Cleric", "points": 68, "type": "Leader" },
         { "name": "Infested Templar", "points": 49, "type": "Leader" },
         { "name": "Infested Pilgrims", "points": 58, "type": "Core" },
         { "name": "Infested Warriors", "points": 62, "type": "Core" },
