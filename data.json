@@ -59,6 +59,7 @@
         { "name": "Caldish Lord", "points": 51, "type": "Leader" },
         { "name": "Revenant Footmen", "points": 59, "type": "Core" },
         { "name": "Wolfsguard", "points": 62, "type": "Core" },
+        { "name": "Revenant Hounds", "points": 39, "type": "Core" },
         { "name": "Wolfsguard Cavalry", "points": 77, "type": "Special" },
         { "name": "Revenant Hulks", "points": 55, "type": "Special" },
         { "name": "Wolfsguard Piercers", "points": 50, "type": "Special" },
@@ -67,4 +68,5 @@
     }
   ]
 }
+
 
