@@ -33,10 +33,13 @@
       "name": "Seraphic Cults",
       "units": [
         { "name": "Oculus Consul", "points": 52, "type": "Leader" },
+        { "name": "Winged Prophet", "points": 72, "type": "Special" },
         { "name": "Seraphic Cultists", "points": 60, "type": "Core" },
-        { "name": "Oculus Vigilants", "points": 51, "type": "Core" },
+        { "name": "Oculus Vigilants", "points": 39, "type": "Core" },
+        { "name": "Ascended Cultist", "points": 56, "type": "Special" },
         { "name": "Seraphic Guardian", "points": 51, "type": "Special" },
         { "name": "Cherubs", "points": 77, "type": "Special" },
+        { "name": "Seraphim", "points": 82, "type": "Special" },
         { "name": "Oculus Apostle", "points": 38, "type": "Special" }
       ]
     },
@@ -68,5 +71,6 @@
     }
   ]
 }
+
 
 
